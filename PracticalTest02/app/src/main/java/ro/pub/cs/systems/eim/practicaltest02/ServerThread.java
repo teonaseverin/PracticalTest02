@@ -74,10 +74,10 @@ public class ServerThread extends Thread{
                 Log.i(Constants.TAG, pageSourceCode);
             }
             JSONObject content = new JSONObject(pageSourceCode);
-            JSONObject usdJSON = content.getJSONObject("bpi").getJSONObject("USD");
-            JSONObject eurJSON = content.getJSONObject("bpi").getJSONObject("EUR");
-            this.usd = usdJSON.getDouble("rate_float");
-            this.euro = eurJSON.getDouble("rate_float");
+            JSONObject JSONUsd = content.getJSONObject("bpi").getJSONObject("USD");
+            JSONObject JSONEuro = content.getJSONObject("bpi").getJSONObject("EUR");
+            this.usd = JSONUsd.getDouble("rate_float");
+            this.euro = JSONEuro.getDouble("rate_float");
             Log.d(Constants.TAG, usd + "");
             Log.d(Constants.TAG, euro + "");
         } catch (JSONException e) {

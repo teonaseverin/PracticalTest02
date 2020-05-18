@@ -38,6 +38,7 @@ public class ClientThread extends Thread {
             }
             printWriter.println(informationType);
             printWriter.flush();
+            Log.d(Constants.TAG, "am trimis " + informationType);
             String bitcoinInfo;
             while ((bitcoinInfo = bufferedReader.readLine()) != null) {
                 final String finalizedBitcoinInformation = bitcoinInfo;

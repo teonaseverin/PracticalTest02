@@ -51,6 +51,7 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             String clientAddress = clientAddressEditText.getText().toString();
             String clientPort = clientPortEditText.getText().toString();
+            String informationType = informationTypeSpinner.getSelectedItem().toString();
             if (clientAddress == null || clientAddress.isEmpty()
                     || clientPort == null || clientPort.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] Client connection parameters should be filled!", Toast.LENGTH_SHORT).show();
@@ -60,6 +61,12 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] There is no server to connect to!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            bitcoinInfoTextView.setText(Constants.EMPTY_STRING);
+
+            clientThread = new ClientThread(
+                    clientAddress, Integer.parseInt(clientPort), informationType, bitcoinInfoTextView
+            );
+            clientThread.start();
         }
     }
 
