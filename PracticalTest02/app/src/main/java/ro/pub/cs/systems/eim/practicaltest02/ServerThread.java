@@ -8,6 +8,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -78,19 +81,32 @@ public class ServerThread extends Thread{
             JSONObject JSONEuro = content.getJSONObject("bpi").getJSONObject("EUR");
             this.usd = JSONUsd.getDouble("rate_float");
             this.euro = JSONEuro.getDouble("rate_float");
-            Log.d(Constants.TAG, usd + "");
-            Log.d(Constants.TAG, euro + "");
+            Log.d(Constants.TAG, "USD: " + usd + "");
+            Log.d(Constants.TAG, "EURO: " + euro + "");
         } catch (JSONException e) {
-
+            Log.e(Constants.TAG, "[SERVER THREAD] An exception has occurred: " + e.getMessage());
+            if (Constants.DEBUG) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
-
+            Log.e(Constants.TAG, "[SERVER THREAD] An exception has occurred: " + e.getMessage());
+            if (Constants.DEBUG) {
+                e.printStackTrace();
+            }
         }
     }
+
+
 
     @Override
     public void run() {
         try {
-            doFirstQuery();
+            ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
+            scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+                public void run() {
+                    doFirstQuery();
+                }
+            }, 0, 20, TimeUnit.SECONDS);
             while (!Thread.currentThread().isInterrupted()) {
                 Log.i(Constants.TAG, "[SERVER THREAD] Waiting for a client invocation...");
                 Socket socket = serverSocket.accept();
